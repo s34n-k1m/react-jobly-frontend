@@ -1,0 +1,9 @@
+.CompanyCard {
+    color: black;
+    text-decoration: none;
+}
+
+.CompanyCard:hover {
+    color: "#0056b3";
+    text-decoration: none;
+}

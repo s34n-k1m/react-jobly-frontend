@@ -37,29 +37,27 @@ class JoblyApi {
   /** Get details on a company by handle. */
 
   static async getCompany(handle) {
-    let res = await this.request(`companies/${handle}`);
+    const res = await this.request(`companies/${handle}`);
     return res.company;
   }
 
 
   /** Get all companies */
-  static async getAllCompanies() {
-    let res = await this.request(`companies`);
+  static async getCompanies() {
+    const res = await this.request(`companies`);
     return res.companies;
   }
 
-
-
   /** Get all jobs */
-  static async getAllJobs() {
-    let res = await this.request(`jobs`);
+  static async getJobs() {
+    const res = await this.request(`jobs`);
     return res.jobs;
   }
 
   /* apply for a job with a logged in user */
 
   static async applyJob(username, id) {
-    let res = await this.request(`users/${username}/jobs/${id}`, {}, "post");
+    const res = await this.request(`users/${username}/jobs/${id}`, {}, "post");
     return res.applied;
   }
 
@@ -70,3 +68,6 @@ class JoblyApi {
 JoblyApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
   "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
   "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
+
+
+export default JoblyApi;

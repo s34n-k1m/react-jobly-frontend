@@ -9,10 +9,20 @@ import SignupForm from "./SignupForm";
 import ProfileForm from "./ProfileForm";
 
 
-function Routes({ functions, currUser }) {
+/** Routes Component
+ * 
+ * Props:
+ * - currentUser: {}
+ * - logout: function passed from App
+ * 
+ * State: none
+ * 
+ * App -> Routes -> {Homepage, CompanyList, CompanyDetail, JobList, LoginForm, SignupForm, ProfileForm}
+ * */
+function Routes({ currentUser, logout }) {
   return (
-    < BrowserRouter>
-      <Nav></Nav>
+    <>
+      <Nav currentUser={currentUser} logout={logout}/>
       <Switch>
         <Route exact path="/">
           <Homepage />
@@ -37,8 +47,8 @@ function Routes({ functions, currUser }) {
         </Route>
         <Redirect to="/"/>
       </Switch>
-    </ BrowserRouter>
-  )
+    </>
+  );
 
 }
 

@@ -1,7 +1,9 @@
-function Homepage(){
-  return (<div> Homepage
-    <h3>homepage</h3>
-  </div>)
+
+function Homepage() {
+  return (
+    <div>
+      <h3>homepage</h3>
+    </div>);
 }
 
 
