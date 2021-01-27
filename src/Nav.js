@@ -1,19 +1,19 @@
 import { NavLink } from "react-router-dom";
-
+import { useContext } from "react";
+import UserContext from "./userContext";
 
 /** Navbar Component
  * 
  * Props:
- * - currentUser: {}
  * - logout: function from App Component
  * 
  * State: none
  * 
  * Routes -> Nav
  * */
-function Nav({ currentUser, logout }) {
+function Nav({ logout }) {
+  const currentUser = useContext(UserContext);
 
-  console.log("CURRENT USER =", currentUser);
   /* generate navlinks for when user is logged out */
   function displayLinksLoggedOut() {
     return (

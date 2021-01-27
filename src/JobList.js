@@ -30,7 +30,14 @@ function JobList() {
 
 
   if (jobs === null) return <div>Loading...</div>;
-  if (jobs.length === 0) return <div>No results found.</div>;
+
+  if (jobs.length === 0) {
+    return (
+      <div>
+        <SearchForm search={searchJobsByName} />
+        No results found.
+      </div>);
+  }
 
   return (
     <div className="JobList">

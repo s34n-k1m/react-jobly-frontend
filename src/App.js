@@ -1,10 +1,10 @@
 import './App.css';
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Routes from "./Routes";
 import { BrowserRouter } from 'react-router-dom';
 import JoblyApi from "./api";
 import jwt from "jsonwebtoken";
- 
+import UserContext from "./userContext";
 
 // import {BrowserRouter} from "react-router-dom";
 
@@ -28,21 +28,32 @@ function App() {
     setToken(null);
   }
   /* signup function, set token */
-  async function signup(formData){
-    const resToken = await JoblyApi.signup(formData);
-    JoblyApi.token = resToken;
-    setToken(resToken);
-  }
-  /* login function, set token*/
-  async function login(formData){
-    const resToken = await JoblyApi.login(formData);
-    JoblyApi.token = resToken;
-    setToken(resToken);
+  async function signup(formData) {
+    try {
+      const resToken = await JoblyApi.signup(formData);
+      JoblyApi.token = resToken;
+      setToken(resToken);
+      return ["Signup successful"]
+    } catch (err) {
+      return err;
+    }
   }
 
-  useEffect(function getCurrentUser(){
-    async function getCurrentUserApiCall(){
-      if (token !== null){
+  /* login function, set token*/
+  async function login(formData) {
+    try {
+      const resToken = await JoblyApi.login(formData);
+      JoblyApi.token = resToken;
+      setToken(resToken);
+      return ["Login successful"];
+    } catch (err) {
+      return err;
+    }
+  }
+
+  useEffect(function getCurrentUser() {
+    async function getCurrentUserApiCall() {
+      if (token !== null) {
         const payload = jwt.decode(token);
         const user = await JoblyApi.getUser(payload.username);
         setCurrentUser(user);
@@ -50,16 +61,17 @@ function App() {
     };
     getCurrentUserApiCall();
   }, [token])
- 
+
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes 
-          currentUser={currentUser}
-          logout={logout}
-          signup={signup}
-          login={login}/>
+        <UserContext.Provider value={currentUser} >
+          <Routes
+            logout={logout}
+            signup={signup}
+            login={login} />
+        </UserContext.Provider>
       </BrowserRouter>
     </div>
   );

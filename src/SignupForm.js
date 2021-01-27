@@ -1,27 +1,53 @@
-import { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import UserContext from "./userContext";
+
 
 /* 
 Props: signup function from Routes, App
 State: formData
 App -> Routes -> SignupForm
 */
-function SignupForm({ signup, currentUser}) {
+function SignupForm({ signup }) {
   const initialFormData = { username: "test", password: "password", firstName: "testf", lastName: "testl", email: "test@test.com" }
   const [formData, setFormData] = useState(initialFormData);
+  const [errorMessages, setErrorMessages] = useState([]);
 
-  function handleSubmit(evt) {
+  const history = useHistory();
+  const currentUser = useContext(UserContext);
+
+  /* Handles form submission */
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    signup(formData);
-    setFormData(initialFormData);
+    const resSignup = await signup(formData);
+
+    if (resSignup[0] === "Signup successful") {
+      setFormData(initialFormData);
+    } else {
+      setErrorMessages(resSignup);
+    }
   }
 
+  /* Handles form data changes */
   function handleChange(evt) {
     const { name, value } = evt.target;
     setFormData(fData => ({ ...fData, [name]: value }));
   }
 
-  if (Object.keys(currentUser).length !== 0) return <Redirect to="/companies" />
+  /* Displays error message if wrong login info inputted */
+  function displayErrorMessage() {
+    return (
+      <>
+        {
+          errorMessages.length > 0
+            ? errorMessages.map((e, i) => (
+              <div key={i} className="alert alert-danger mt-3">{e}</div>))
+            : null
+        }
+      </>);
+  }
+
+  if (Object.keys(currentUser).length !== 0) history.push("/companies");
 
   return (
     <div className="SignupForm col-6 container">
@@ -33,6 +59,7 @@ function SignupForm({ signup, currentUser}) {
           id="username"
           value={formData.username}
           onChange={handleChange}
+          required
         />
         <label htmlFor="password" className="">Password</label>
         <input
@@ -42,6 +69,7 @@ function SignupForm({ signup, currentUser}) {
           type="password"
           value={formData.password}
           onChange={handleChange}
+          required
         />
         <label htmlFor="firstName" className="">First Name</label>
         <input
@@ -50,6 +78,7 @@ function SignupForm({ signup, currentUser}) {
           id="firstName"
           value={formData.firstName}
           onChange={handleChange}
+          required
         />
         <label htmlFor="lastName" className="">Last Name</label>
         <input
@@ -58,6 +87,7 @@ function SignupForm({ signup, currentUser}) {
           id="lastName"
           value={formData.lastName}
           onChange={handleChange}
+          required
         />
 
         <label htmlFor="email" className="">Email</label>
@@ -69,6 +99,7 @@ function SignupForm({ signup, currentUser}) {
           value={formData.email}
           onChange={handleChange}
         />
+        {displayErrorMessage()}
         <button className="btn btn-primary mt-3">Sign Up!</button>
       </form>
     </div>

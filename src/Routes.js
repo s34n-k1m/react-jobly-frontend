@@ -21,13 +21,13 @@ import ProfileForm from "./ProfileForm";
  * 
  * App -> Routes -> {Homepage, CompanyList, CompanyDetail, JobList, LoginForm, SignupForm, ProfileForm}
  * */
-function Routes({ currentUser, login, logout, signup }) {
+function Routes({ login, logout, signup }) {
   return (
     <>
-      <Nav currentUser={currentUser} logout={logout}/>
+      <Nav logout={logout}/>
       <Switch>
         <Route exact path="/">
-          <Homepage currentUser={currentUser} />
+          <Homepage />
         </Route>
         <Route exact path="/companies">
           <CompanyList />
@@ -39,10 +39,10 @@ function Routes({ currentUser, login, logout, signup }) {
           <JobList />
         </Route>
         <Route exact path="/login">
-          <LoginForm login={login} currentUser={currentUser} />
+          <LoginForm login={login} />
         </Route>
         <Route exact path="/signup">
-          <SignupForm signup={signup} currentUser={currentUser} />
+          <SignupForm signup={signup} />
         </Route>
         <Route exact path="/profile">
           <ProfileForm />

@@ -29,7 +29,15 @@ function CompanyList() {
 
   // search might return [], could add loading state
   if (companies === null) return <div>Loading...</div>;
-  if (companies.length === 0) return <div>No results found.</div>;
+
+  if (companies.length === 0) {
+    return (
+      <div>
+        <SearchForm search={searchCompanyByName} />
+        No results found.
+      </div>);
+  }
+
 
   // add keys
   return (

@@ -43,7 +43,6 @@ class JoblyApi {
 
   /* signup */
   static async signup (userData) {
-    console.log(userData);
     const res = await this.request(`auth/register`, {...userData}, "post");
     return res.token;
   }

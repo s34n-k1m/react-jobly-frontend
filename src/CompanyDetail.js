@@ -19,7 +19,6 @@ function CompanyDetail() {
     async function getCompanyWithApi() {
       try {
         const resCompany = await JoblyApi.getCompany(handle);
-        console.log("RES COMPANY=", resCompany);
         setCompany(resCompany);
       } catch (err) {
         //have a state for company not found, true and false

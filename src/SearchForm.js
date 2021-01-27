@@ -24,6 +24,7 @@ function SearchForm({ search }) {
           value={formData.searchTerm}
           placeholder="Enter search term here"
           onChange={handleChange}
+          minLength="3"
         >
         </input>
         <button className="btn btn-primary">Search</button>

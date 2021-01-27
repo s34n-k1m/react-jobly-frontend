@@ -1,29 +1,55 @@
-import { useState } from "react";
-import { Redirect } from "react-router-dom";
-
+import { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import UserContext from "./userContext";
 /* 
 Props: login function from Routes, App
 State: formData
 App -> Routes -> LoginForm
 */
-function LoginForm({ login, currentUser}) {
-  const initialFormData = { username: "test", password: "password"}
+function LoginForm({ login }) {
+  const initialFormData = { username: "test", password: "password" }
   const [formData, setFormData] = useState(initialFormData);
+  const [errorMessages, setErrorMessages] = useState([]);
 
-  function handleSubmit(evt) {
+  const history = useHistory();
+  const currentUser = useContext(UserContext);
+
+  /* Handles form submission */
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    login(formData);
-    setFormData(initialFormData);
+    const resLogin = await login(formData);
+
+    if (resLogin[0] === "Login successful") {
+      setFormData(initialFormData);
+    } else {
+      setErrorMessages(resLogin);
+    }
   }
 
+  /* Handles form data changes */
   function handleChange(evt) {
     const { name, value } = evt.target;
     setFormData(fData => ({ ...fData, [name]: value }));
   }
-  if (Object.keys(currentUser).length !== 0) return <Redirect to="/companies" />
+
+  /* Displays error message if wrong login info inputted */
+  function displayErrorMessage() {
+    return (
+      <>
+        {
+          errorMessages.length > 0
+            ? errorMessages.map((e, i) => (
+              <div key={i} className="alert alert-danger mt-3">{e}</div>))
+            : null
+        }
+      </>);
+  }
+
+  if (Object.keys(currentUser).length !== 0) history.push("/companies");
 
   return (
     <div className="LoginForm col-6 container">
+
       <form className="LoginForm-form my-3 mx-15" onSubmit={handleSubmit}>
         <label htmlFor="username" className="">Username</label>
         <input
@@ -32,6 +58,7 @@ function LoginForm({ login, currentUser}) {
           id="username"
           value={formData.username}
           onChange={handleChange}
+          required
         />
         <label htmlFor="password" className="">Password</label>
         <input
@@ -41,7 +68,9 @@ function LoginForm({ login, currentUser}) {
           type="password"
           value={formData.password}
           onChange={handleChange}
+          required
         />
+        {displayErrorMessage()}
         <button className="btn btn-primary mt-3">Log in!</button>
       </form>
     </div>
