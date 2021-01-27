@@ -23,7 +23,6 @@ function App() {
     setCurrentUser(null);
   }
  
-
   return (
     <div className="App">
       <BrowserRouter>

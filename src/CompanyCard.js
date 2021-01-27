@@ -16,7 +16,7 @@ function CompanyCard({ company }) {
       <div className="CompanyCard-card card">
         <div className="CompanyCard-body card-body">
           {company.logoUrl
-            ? <img className="float-right" src={company.logoUrl} alt="Card image cap" />
+            ? <img className="float-right" src={company.logoUrl} alt={company.handle}/>
             : null}
           <h5 className="CompanyCard-title card-title text-left">{company.name}</h5>
           <p className="CompanyCard-description text-left">{company.description}</p>

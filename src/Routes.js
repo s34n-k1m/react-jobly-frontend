@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect, BrowserRouter} from "react-router-dom";
+import { Route, Switch, Redirect} from "react-router-dom";
 import Homepage from "./Homepage";
 import Nav from "./Nav";
 import CompanyList from "./CompanyList";

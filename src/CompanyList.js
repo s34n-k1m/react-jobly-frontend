@@ -1,11 +1,16 @@
 import JoblyApi from "./api";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import CompanyCard from "./CompanyCard";
 
-/*  */
-function CompanyList(){
+/*  
+Props: none
+State: companies [company,...]
+App -> Routes -> CompanyList -> CompanyCard
+*/
+function CompanyList() {
   const [companies, setCompanies] = useState(null);
 
+  /* get companies */
   useEffect(function getCompanies() {
     async function getCompaniesWithApi() {
       const resCompanies = await JoblyApi.getCompanies();
@@ -13,13 +18,13 @@ function CompanyList(){
     }
     getCompaniesWithApi();
   }, []);
-
+  // search might return [], could add loading state
   if (!companies) return <div>Loading...</div>;
-
+// add keys
   return (
-  <div>
-    {companies.map(c => <CompanyCard company={c}/>)}
-  </div>);
+    <div className="CompanyList">
+      {companies.map(c => <CompanyCard key={c.handle} company={c} />)}
+    </div>);
 }
 
 
