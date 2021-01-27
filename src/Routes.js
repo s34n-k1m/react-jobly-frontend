@@ -14,18 +14,20 @@ import ProfileForm from "./ProfileForm";
  * Props:
  * - currentUser: {}
  * - logout: function passed from App
+ * - login: function passed from App
+ * - signup: function passed from App
  * 
  * State: none
  * 
  * App -> Routes -> {Homepage, CompanyList, CompanyDetail, JobList, LoginForm, SignupForm, ProfileForm}
  * */
-function Routes({ currentUser, logout }) {
+function Routes({ currentUser, login, logout, signup }) {
   return (
     <>
       <Nav currentUser={currentUser} logout={logout}/>
       <Switch>
         <Route exact path="/">
-          <Homepage />
+          <Homepage currentUser={currentUser} />
         </Route>
         <Route exact path="/companies">
           <CompanyList />
@@ -37,10 +39,10 @@ function Routes({ currentUser, logout }) {
           <JobList />
         </Route>
         <Route exact path="/login">
-          <LoginForm />
+          <LoginForm login={login} currentUser={currentUser} />
         </Route>
         <Route exact path="/signup">
-          <SignupForm />
+          <SignupForm signup={signup} currentUser={currentUser} />
         </Route>
         <Route exact path="/profile">
           <ProfileForm />

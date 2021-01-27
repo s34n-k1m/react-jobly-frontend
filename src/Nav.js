@@ -52,7 +52,7 @@ function Nav({ currentUser, logout }) {
         </li>
         <li className="nav-item">
           <NavLink exact to="/" onClick={handleLogout} className="nav-link">
-            Logout {currentUser}
+            Logout {currentUser.username}
           </NavLink>
         </li>
       </ul>
@@ -70,7 +70,7 @@ function Nav({ currentUser, logout }) {
         Jobly
       </NavLink>
       {/* Put <ul> here */}
-      {currentUser
+      {(Object.keys(currentUser).length !== 0)
         ? displayLinksLoggedIn()
         : displayLinksLoggedOut()}
     </nav>
