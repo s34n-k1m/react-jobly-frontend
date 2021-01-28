@@ -26,7 +26,7 @@ function App() {
   function logout() {
     setToken(null);
   }
-  
+
   /* signup function, set token */
   async function signup(formData) {
     try {
@@ -54,7 +54,7 @@ function App() {
   useEffect(function getCurrentUser() {
     async function getCurrentUserApiCall() {
       if (token !== null) {
-        JoblyApi.token = resToken;
+        JoblyApi.token = token;
 
         const payload = jwt.decode(token);
         const user = await JoblyApi.getUser(payload.username);
