@@ -24,57 +24,34 @@ import { useContext } from "react";
 function Routes({ login, logout, signup }) {
   const currentUser = useContext(UserContext);
 
-  function notLoggedInRoutes() {
-    return (<>
-      <Nav logout={logout} />
-      <Switch>
-        <Route exact path="/">
-          <Homepage />
-        </Route>
-        <Route exact path="/login">
-          <LoginForm login={login} />
-        </Route>
-        <Route exact path="/signup">
-          <SignupForm signup={signup} />
-        </Route>
-        <Redirect to="/login"/>
-      </Switch>
-    </>)
-  }
-// private routes component
-  // pass in components as children for other components 
-  // wrapper component
-    
-  function loggedInRoutes() {
-    return (<>
+  return (
+    <>
       <Nav logout={logout} />
       <Switch>
         <Route exact path="/">
           <Homepage />
         </Route>
         <Route exact path="/companies">
-          <CompanyList />
+          {currentUser ? <CompanyList /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/companies/:handle">
-          <CompanyDetail />
+          {currentUser ? <CompanyDetail /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/jobs">
-          <JobList />
+          {currentUser ? <JobList /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/profile">
-          <ProfileForm />
+          {currentUser ? <ProfileForm /> : <Redirect to="/" />}
         </Route>
-        <Redirect to="/companies"/>
+        <Route exact path="/login">
+          {!currentUser ? <LoginForm login={login} /> : <Redirect to="/" />}
+        </Route>
+        <Route exact path="/signup">
+          {!currentUser ? <SignupForm signup={signup} /> : <Redirect to="/" />}
+        </Route>
+        <Redirect to="/" />
       </Switch>
-    </>)
-  }
-  return (
-    <>
-      {currentUser
-        ? loggedInRoutes()
-        : notLoggedInRoutes()}
-    </>
-  );
+    </>);
 }
 
 export default Routes;

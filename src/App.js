@@ -22,6 +22,7 @@ import useLocalStorage from "./useLocalStorage";
 function App() {
   const [currentUser, setCurrentUser] = useState(null); // CHANGE THE DEFAULT VALUE LATER
   const [token, setToken] = useLocalStorage("token", null);
+  const [receivedCurrUser, setReceivedCurrUser] = useState(false);
 
   /* Logout function, sets currentUser to null */
   function logout() {
@@ -59,14 +60,16 @@ function App() {
 
         const payload = jwt.decode(token);
         const user = await JoblyApi.getUser(payload.username);
-        
+
         setCurrentUser(user);
+        setReceivedCurrUser(true);
       }
     };
     setCurrentUser(null);
     getCurrentUserApiCall();
   }, [token])
 
+  if (!receivedCurrUser) return <div> Loading... </div>;
 
   return (
     <div className="App">

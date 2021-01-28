@@ -1,6 +1,5 @@
-import { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import UserContext from "./userContext";
+import { useState, useEffect } from "react";
+
 /* 
 Props: 
   login function from Routes, App
@@ -9,14 +8,12 @@ State:
   isLoggingIn: T/F
 App -> Routes -> LoginForm
 */
+const initialFormData = { username: "test", password: "password" }
+
 function LoginForm({ login }) {
-  const initialFormData = { username: "test", password: "password" }
   const [formData, setFormData] = useState(initialFormData);
   const [errorMessages, setErrorMessages] = useState([]);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  const history = useHistory();
-  const currentUser = useContext(UserContext);
 
   // TODO: have state to say "we are logging in", change to effect
   /* Handles form submission */
@@ -36,9 +33,10 @@ function LoginForm({ login }) {
     }
     if (isLoggingIn){
       loginAPICall();
+      setIsLoggingIn(false);
     }
-    setIsLoggingIn(false);
-  }, [isLoggingIn])
+  }, [isLoggingIn, formData, login])
+
   /* Handles form data changes */
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -57,7 +55,6 @@ function LoginForm({ login }) {
         }
       </>);
   }
-  if (currentUser) history.push("/companies");
 
   return (
     <div className="LoginForm col-6 container">

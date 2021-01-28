@@ -2,8 +2,6 @@ import JoblyApi from "./api";
 import { useState, useEffect} from "react";
 import CompanyCard from "./CompanyCard";
 import SearchForm from "./SearchForm";
-// import UserContext from "./userContext";
-// import {Redirect} from "react-router-dom";
 
 /*  
 Props: none
@@ -19,9 +17,7 @@ function CompanyList() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(null);
   const [searchResultStr, setSearchResultStr] = useState(null);
-  // const currentUser = useContext(UserContext);
 
-  // if (!currentUser) return <Redirect to="/"/>
   /* get companies */
   useEffect(function getCompanies() {
     async function getCompaniesWithApi() {
