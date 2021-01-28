@@ -9,7 +9,9 @@ State: formData
 App -> Routes -> SignupForm
 */
 function SignupForm({ signup }) {
+  // TODO: DUMMY DATA FOR TESTING, CHANGE LATER
   const initialFormData = { username: "test", password: "password", firstName: "testf", lastName: "testl", email: "test@test.com" }
+  
   const [formData, setFormData] = useState(initialFormData);
   const [errorMessages, setErrorMessages] = useState([]);
 

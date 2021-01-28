@@ -11,7 +11,7 @@ function SearchForm({ search }) {
 
   function handleChange(evt) {
     const { name, value } = evt.target;
-    setFormData(fData => ({ [name]: value }));
+    setFormData({ [name]: value });
   }
 
   return (

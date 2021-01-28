@@ -14,6 +14,7 @@ function LoginForm({ login }) {
   const history = useHistory();
   const currentUser = useContext(UserContext);
 
+  // TODO: have state to say "we are logging in", change to effect
   /* Handles form submission */
   async function handleSubmit(evt) {
     evt.preventDefault();
@@ -45,6 +46,7 @@ function LoginForm({ login }) {
       </>);
   }
 
+  // TODO: Clean up (make currentUser default null) and add comment here
   if (Object.keys(currentUser).length !== 0) history.push("/companies");
 
   return (

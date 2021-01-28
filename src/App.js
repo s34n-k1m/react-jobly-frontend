@@ -24,15 +24,15 @@ function App() {
 
   /* Logout function, sets currentUser to null */
   function logout() {
-    setCurrentUser({});
     setToken(null);
   }
+  
   /* signup function, set token */
   async function signup(formData) {
     try {
       const resToken = await JoblyApi.signup(formData);
-      JoblyApi.token = resToken;
       setToken(resToken);
+
       return ["Signup successful"]
     } catch (err) {
       return err;
@@ -43,8 +43,8 @@ function App() {
   async function login(formData) {
     try {
       const resToken = await JoblyApi.login(formData);
-      JoblyApi.token = resToken;
       setToken(resToken);
+
       return ["Login successful"];
     } catch (err) {
       return err;
@@ -54,11 +54,15 @@ function App() {
   useEffect(function getCurrentUser() {
     async function getCurrentUserApiCall() {
       if (token !== null) {
+        JoblyApi.token = resToken;
+
         const payload = jwt.decode(token);
         const user = await JoblyApi.getUser(payload.username);
+        
         setCurrentUser(user);
       }
     };
+    setCurrentUser({});
     getCurrentUserApiCall();
   }, [token])
 
