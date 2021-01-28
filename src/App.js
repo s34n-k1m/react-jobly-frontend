@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import JoblyApi from "./api";
 import jwt from "jsonwebtoken";
 import UserContext from "./userContext";
+import useLocalStorage from "./useLocalStorage";
 
 // import {BrowserRouter} from "react-router-dom";
 
@@ -19,8 +20,8 @@ import UserContext from "./userContext";
  * App -> Routes
  * */
 function App() {
-  const [currentUser, setCurrentUser] = useState({}); // CHANGE THE DEFAULT VALUE LATER
-  const [token, setToken] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // CHANGE THE DEFAULT VALUE LATER
+  const [token, setToken] = useLocalStorage("token", null);
 
   /* Logout function, sets currentUser to null */
   function logout() {
@@ -62,7 +63,7 @@ function App() {
         setCurrentUser(user);
       }
     };
-    setCurrentUser({});
+    setCurrentUser(null);
     getCurrentUserApiCall();
   }, [token])
 

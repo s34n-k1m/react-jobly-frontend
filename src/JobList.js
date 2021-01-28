@@ -6,42 +6,67 @@ import SearchForm from "./SearchForm";
 
 /*  
 Props: none
-State: jobs [job,...]
+State: 
+  jobs [job,...]
+  isLoading : T/F
+  searchTerm: "account"
+  searchResultStr: "search results for 'account' "
 App -> Routes -> JobList -> JobCard
 */
 function JobList() {
   const [jobs, setJobs] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [searchResultStr, setSearchResultStr] = useState(null);
 
   /* get jobs */
   useEffect(function getJobs() {
     async function getJobsWithApi() {
       const resJobs = await JoblyApi.getJobs();
       setJobs(resJobs);
+      setIsLoading(false);
     }
     getJobsWithApi();
   }, []);
 
-  /* Make API request to get filtered companies list by name*/
-  async function searchJobsByName(title) {
-    setJobs(null);
-    const resJobs = await JoblyApi.getJobs(title);
-    setJobs(resJobs);
+
+  function searchJob(name) {
+    setSearchTerm(name);
+    setSearchResultStr(`results for '${name}'`)
   }
 
 
-  if (jobs === null) return <div>Loading...</div>;
 
+  useEffect(function search() {
+    async function searchJobsByName() {
+      const resJobs = await JoblyApi.getJobs(searchTerm);
+      setJobs(resJobs);
+      setSearchTerm(null);
+    }
+    if (searchTerm) {
+      searchJobsByName();
+    }
+  }, [searchTerm]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (searchTerm) return <div>Searching...</div>;
   if (jobs.length === 0) {
     return (
-      <div>
-        <SearchForm search={searchJobsByName} />
+      <h5>
+        <SearchForm search={searchJob} />
         No results found.
-      </div>);
+      </h5>);
   }
+
 
   return (
     <div className="JobList">
-      <SearchForm search={searchJobsByName} />
+      <SearchForm search={searchJob} />
+      {
+        searchResultStr
+          ? <h5>{jobs.length} {searchResultStr}</h5>
+          : null
+      }
       {jobs.map(j => <JobCard key={j.id} job={j} />)}
     </div>);
 }

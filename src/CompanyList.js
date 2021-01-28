@@ -1,18 +1,27 @@
 import JoblyApi from "./api";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import CompanyCard from "./CompanyCard";
 import SearchForm from "./SearchForm";
+// import UserContext from "./userContext";
+// import {Redirect} from "react-router-dom";
 
 /*  
 Props: none
-State: companies [company,...]
+State: 
+  companies [company,...]
+  isLoading : T/F
+  searchTerm: "account"
+  searchResultStr: "search results for 'account' "
 App -> Routes -> CompanyList -> CompanyCard
 */
 function CompanyList() {
   const [companies, setCompanies] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(null);
-  
+  const [searchResultStr, setSearchResultStr] = useState(null);
+  // const currentUser = useContext(UserContext);
+
+  // if (!currentUser) return <Redirect to="/"/>
   /* get companies */
   useEffect(function getCompanies() {
     async function getCompaniesWithApi() {
@@ -23,15 +32,10 @@ function CompanyList() {
     getCompaniesWithApi();
   }, []);
 
-  // /* Make API request to get filtered companies list by name*/
-  // async function searchCompanyByName(name) {
-  //   setCompanies(null);
-  //   const resCompanies = await JoblyApi.getCompanies(name);
-  //   setCompanies(resCompanies);
-  // }
 
   function searchCompany(name) {
     setSearchTerm(name);
+    setSearchResultStr(`search results for '${name}'`)
   }
 
   useEffect(function search() {
@@ -40,9 +44,8 @@ function CompanyList() {
       setCompanies(resCompanies);
       setSearchTerm(null);
     }
-    
-    console.log("SEARCH EFFECT");
-    if (searchTerm){
+
+    if (searchTerm) {
       searchCompanyByName();
     }
   }, [searchTerm]);
@@ -52,17 +55,21 @@ function CompanyList() {
   if (searchTerm) return <div>Searching...</div>;
   if (companies.length === 0) {
     return (
-      <div>
+      <h5>
         <SearchForm search={searchCompany} />
         No results found.
-      </div>);
+      </h5>);
   }
 
-  console.log("PASSED THE IF CONDITIONS");
   // add keys
   return (
     <div className="CompanyList">
       <SearchForm search={searchCompany} />
+      {
+        searchResultStr
+          ? <h5>{companies.length} {searchResultStr}</h5>
+          : null
+      }
       {companies.map(c => <CompanyCard key={c.handle} company={c} />)}
     </div>);
 }

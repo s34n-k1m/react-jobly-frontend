@@ -11,7 +11,7 @@ function Homepage() {
   const currentUser = useContext(UserContext);
   const history = useHistory();
 
-  if (Object.keys(currentUser).length !== 0) history.push("/companies");
+  if (currentUser) history.push("/companies");
 
   return (
     <div className="Homepage mb-4 font-weight-bold container ">

@@ -70,7 +70,7 @@ function Nav({ logout }) {
         Jobly
       </NavLink>
       {/* Put <ul> here */}
-      {(Object.keys(currentUser).length !== 0)
+      {(currentUser)
         ? displayLinksLoggedIn()
         : displayLinksLoggedOut()}
     </nav>

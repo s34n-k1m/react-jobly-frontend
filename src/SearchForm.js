@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-/*  */
+/* 
+props: search function
+state: formData {searchTerm:""}
+App -> CompanyList, JobList -> SearchForm
+*/
 function SearchForm({ search }) {
   const [formData, setFormData] = useState({ searchTerm: "" });
 
@@ -25,6 +29,7 @@ function SearchForm({ search }) {
           placeholder="Enter search term here"
           onChange={handleChange}
           minLength="3"
+          required
         >
         </input>
         <button className="btn btn-primary">Search</button>

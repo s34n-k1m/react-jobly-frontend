@@ -1,32 +1,44 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import UserContext from "./userContext";
 /* 
-Props: login function from Routes, App
-State: formData
+Props: 
+  login function from Routes, App
+State: 
+  formData
+  isLoggingIn: T/F
 App -> Routes -> LoginForm
 */
 function LoginForm({ login }) {
   const initialFormData = { username: "test", password: "password" }
   const [formData, setFormData] = useState(initialFormData);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const history = useHistory();
   const currentUser = useContext(UserContext);
 
   // TODO: have state to say "we are logging in", change to effect
   /* Handles form submission */
-  async function handleSubmit(evt) {
+  function handleSubmit(evt) {
     evt.preventDefault();
-    const resLogin = await login(formData);
-
-    if (resLogin[0] === "Login successful") {
-      setFormData(initialFormData);
-    } else {
-      setErrorMessages(resLogin);
-    }
+    setIsLoggingIn(true);
   }
 
+  useEffect(function loginUser(){
+    async function loginAPICall(){
+      const resLogin = await login(formData);
+      if (resLogin[0] === "Login successful") {
+        setFormData(initialFormData);
+      } else {
+        setErrorMessages(resLogin);
+      }
+    }
+    if (isLoggingIn){
+      loginAPICall();
+    }
+    setIsLoggingIn(false);
+  }, [isLoggingIn])
   /* Handles form data changes */
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -45,9 +57,7 @@ function LoginForm({ login }) {
         }
       </>);
   }
-
-  // TODO: Clean up (make currentUser default null) and add comment here
-  if (Object.keys(currentUser).length !== 0) history.push("/companies");
+  if (currentUser) history.push("/companies");
 
   return (
     <div className="LoginForm col-6 container">

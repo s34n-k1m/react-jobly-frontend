@@ -1,19 +1,22 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import UserContext from "./userContext";
 
 
 /* 
 Props: signup function from Routes, App
-State: formData
+State: 
+  formData
+  isSigningUp: T/F
 App -> Routes -> SignupForm
 */
 function SignupForm({ signup }) {
   // TODO: DUMMY DATA FOR TESTING, CHANGE LATER
   const initialFormData = { username: "test", password: "password", firstName: "testf", lastName: "testl", email: "test@test.com" }
-  
+// have a piece of state for sendingData T/F
   const [formData, setFormData] = useState(initialFormData);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   const history = useHistory();
   const currentUser = useContext(UserContext);
@@ -21,15 +24,22 @@ function SignupForm({ signup }) {
   /* Handles form submission */
   async function handleSubmit(evt) {
     evt.preventDefault();
-    const resSignup = await signup(formData);
-
-    if (resSignup[0] === "Signup successful") {
-      setFormData(initialFormData);
-    } else {
-      setErrorMessages(resSignup);
-    }
+    setIsSigningUp(true);
   }
+  useEffect(function signupUser() {
+    async function signupAPICall() {
+      const resSignup = await signup(formData);
 
+      if (resSignup[0] === "Signup successful") {
+        setFormData(initialFormData);
+      } else {
+        setErrorMessages(resSignup);
+      }
+    }
+      if (isSigningUp){
+        signupAPICall();
+      }
+      setIsSigningUp(false)}, [isSigningUp, initialFormData, signup])
   /* Handles form data changes */
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -49,7 +59,7 @@ function SignupForm({ signup }) {
       </>);
   }
 
-  if (Object.keys(currentUser).length !== 0) history.push("/companies");
+  if (currentUser) history.push("/companies");
 
   return (
     <div className="SignupForm col-6 container">
