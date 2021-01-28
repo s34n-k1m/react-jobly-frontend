@@ -16,6 +16,7 @@ import useLocalStorage from "./useLocalStorage";
  * State: 
  * - currentUser: {}
  * - token : null
+ * - receivedCurrUser: T/F
  * 
  * App -> Routes
  * */
@@ -53,6 +54,21 @@ function App() {
     }
   }
 
+  /* update user profile function*/
+  async function updateProfile(formData) {
+    try {
+      await JoblyApi.updateProfile(formData);
+      const payload = jwt.decode(token);
+      const user = await JoblyApi.getUser(payload.username);
+
+      setCurrentUser(user);
+
+      return ["Profile update successful"];
+    } catch (err) {
+      return err;
+    }
+  }
+
   useEffect(function getCurrentUser() {
     async function getCurrentUserApiCall() {
       if (token !== null) {
@@ -78,7 +94,8 @@ function App() {
           <Routes
             logout={logout}
             signup={signup}
-            login={login} />
+            login={login}
+            updateProfile={updateProfile} />
         </UserContext.Provider>
       </BrowserRouter>
     </div>

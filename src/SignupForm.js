@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 
-/* 
+/* SignupForm Component
 Props: signup function from Routes, App
+
 State: 
   formData
+  errorMessages
   isSigningUp: T/F
-App -> Routes -> SignupForm
+
+  App -> Routes -> SignupForm
 */
 const initialFormData = { username: "test", password: "password", firstName: "testf", lastName: "testl", email: "test@test.com" };
 

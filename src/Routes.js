@@ -9,6 +9,7 @@ import SignupForm from "./SignupForm";
 import ProfileForm from "./ProfileForm";
 import UserContext from "./userContext";
 import { useContext } from "react";
+
 /** Routes Component
  * 
  * Props:
@@ -21,7 +22,7 @@ import { useContext } from "react";
  * 
  * App -> Routes -> {Homepage, CompanyList, CompanyDetail, JobList, LoginForm, SignupForm, ProfileForm}
  * */
-function Routes({ login, logout, signup }) {
+function Routes({ login, logout, signup, updateProfile }) {
   const currentUser = useContext(UserContext);
 
   return (
@@ -41,7 +42,7 @@ function Routes({ login, logout, signup }) {
           {currentUser ? <JobList /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/profile">
-          {currentUser ? <ProfileForm /> : <Redirect to="/" />}
+          {currentUser ? <ProfileForm updateProfile={updateProfile}/> : <Redirect to="/" />}
         </Route>
         <Route exact path="/login">
           {!currentUser ? <LoginForm login={login} /> : <Redirect to="/" />}

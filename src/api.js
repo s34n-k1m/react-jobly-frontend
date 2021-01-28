@@ -36,23 +36,36 @@ class JoblyApi {
 
 
   /* login  */
-  static async login (userData) {
-    const res = await this.request(`auth/token`, {...userData}, "post");
+  static async login(userData) {
+    const res = await this.request(`auth/token`, { ...userData }, "post");
     return res.token;
   }
 
   /* signup */
-  static async signup (userData) {
-    const res = await this.request(`auth/register`, {...userData}, "post");
+  static async signup(userData) {
+    const res = await this.request(`auth/register`, { ...userData }, "post");
     return res.token;
   }
 
-    /* get the user given the username and token */
-    static async getUser (username) {
-      const res = await this.request(`users/${username}`);
-      return res.user;
-    }
-  
+  /* get the user given the username and token */
+  static async getUser(username) {
+    const res = await this.request(`users/${username}`);
+    return res.user;
+  }
+
+  /* update the user given with user inputted form data */
+  static async updateProfile(userData) {
+    const data = {
+       firstName: userData.firstName,
+       lastName: userData.lastName,
+       email: userData.email,
+       password: userData.password
+    };
+
+    const res = await this.request(`users/${userData.username}`, data, "patch");
+    return res.user;
+  }
+
   /** Get details on a company by handle. */
 
   static async getCompany(handle) {

@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 
-/* 
+/* LoginForm Component
 Props: 
-  login function from Routes, App
+  login: function from Routes, App
+
 State: 
   formData
+  errorMessages
   isLoggingIn: T/F
+  
 App -> Routes -> LoginForm
 */
 const initialFormData = { username: "test", password: "password" }

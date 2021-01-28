@@ -6,7 +6,7 @@ import "./CompanyCard.css";
  * Props:
  * - company: { company data }
  * 
- * State:
+ * State: none
  * 
  * CompanyList -> CompanyCard
 */

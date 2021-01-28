@@ -1,18 +1,82 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "./userContext";
 
-function ProfileForm() {
+
+/* ProfileForm Component
+Props: 
+- updateProfile: function passed from App Component
+
+State: 
+  formData
+  errorMessages
+  isUpdating
+  successMessage
+
+App -> Routes -> ProfileForm
+*/
+function ProfileForm({ updateProfile }) {
   const { username, firstName, lastName, email } = useContext(UserContext);
-
+  
   const [formData, setFormData] = useState({ username, firstName, lastName, email, password: "" });
+  const [errorMessages, setErrorMessages] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-
-  function handleSubmit() {
-
+  /* Handles form submission */
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    setIsUpdating(true);
   }
 
-  function handleChange() {
+  useEffect(function updateUserProfile() {
+    async function updateProfileAPICall() {
+      const resUpdate = await updateProfile(formData);
 
+      if (resUpdate[0] === "Profile update successful") {
+        setFormData(fData => ({ ...fData, password: "" }));
+        setSuccessMessage("Successfully updated");
+      } else {
+        setSuccessMessage(null);
+        setErrorMessages(resUpdate);
+      }
+    }
+
+    if (isUpdating) {
+      updateProfileAPICall();
+      setIsUpdating(false)
+    }
+
+  }, [isUpdating, updateProfile, formData])
+
+  /* Handles form data changes */
+  function handleChange(evt) {
+    const { name, value } = evt.target;
+    setFormData(fData => ({ ...fData, [name]: value }));
+  }
+
+  /* Displays error message if wrong login info inputted */
+  function displayErrorMessage() {
+    return (
+      <>
+        {
+          errorMessages.length > 0
+            ? errorMessages.map((e, i) => (
+              <div key={i} className="alert alert-danger mt-3">{e}</div>))
+            : null
+        }
+      </>);
+  }
+  
+  /* Displays success message if user profile update successful */
+  function displaySuccessMessage() {
+    return (
+      <>
+        {
+          successMessage
+            ? <div className="alert alert-success mt-3">{successMessage}</div>
+            : null
+        }
+      </>);
   }
 
   return (
@@ -51,7 +115,7 @@ function ProfileForm() {
             value={formData.email}
             onChange={handleChange}
           />
-          <label htmlFor="password" className="ProfileForm-password">Confirm password to make changes:</label>
+          <label htmlFor="password" className="ProfileForm-password">Change password:</label>
           <input
             className="SignupForm-password form-control flex-grow-1"
             name="password"
@@ -61,8 +125,9 @@ function ProfileForm() {
             onChange={handleChange}
             required
           />
-          {/* {displayErrorMessage()} */}
-          <button className="btn btn-primary mt-3">Sign Up!</button>
+          {displayErrorMessage()}
+          {displaySuccessMessage()}
+          <button className="btn btn-primary mt-3">Update</button>
         </div>
 
       </form>

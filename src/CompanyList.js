@@ -3,13 +3,16 @@ import { useState, useEffect} from "react";
 import CompanyCard from "./CompanyCard";
 import SearchForm from "./SearchForm";
 
-/*  
+/*  CompanyList Component
+
 Props: none
+
 State: 
   companies [company,...]
   isLoading : T/F
   searchTerm: "account"
   searchResultStr: "search results for 'account' "
+
 App -> Routes -> CompanyList -> CompanyCard
 */
 function CompanyList() {
