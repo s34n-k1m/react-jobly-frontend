@@ -11,18 +11,16 @@ App -> Routes -> CompanyList -> CompanyCard
 function CompanyList() {
   const [companies, setCompanies] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSearching, setIsSearching] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState(null);
+  
   /* get companies */
   useEffect(function getCompanies() {
     async function getCompaniesWithApi() {
-      console.log(companies, "companies on init");
       const resCompanies = await JoblyApi.getCompanies();
-      console.log(resCompanies, "res Companies");
       setCompanies(resCompanies);
+      setIsLoading(false);
     }
     getCompaniesWithApi();
-    setIsLoading(false);
   }, []);
 
   // /* Make API request to get filtered companies list by name*/
@@ -32,29 +30,27 @@ function CompanyList() {
   //   setCompanies(resCompanies);
   // }
 
-
-  function searchCompany() {
-    setIsSearching(true);
+  function searchCompany(name) {
+    setSearchTerm(name);
   }
 
   useEffect(function search() {
-    async function searchCompanyByName(name) {
-      console.log(companies, "companies on search");
-      const resCompanies = await JoblyApi.getCompanies(name);
+    async function searchCompanyByName() {
+      const resCompanies = await JoblyApi.getCompanies(searchTerm);
       setCompanies(resCompanies);
+      setSearchTerm(null);
     }
-    if (isSearching){
-      console.log(companies, "companies before search");
-      setIsLoading(true);
+    
+    console.log("SEARCH EFFECT");
+    if (searchTerm){
       searchCompanyByName();
-      console.log(companies, "companies after search");
-      setIsLoading(false);
     }
-  }, [isSearching]);
+  }, [searchTerm]);
 
 
   if (isLoading) return <div>Loading...</div>;
-  if (companies !== null && companies.length === 0) {
+  if (searchTerm) return <div>Searching...</div>;
+  if (companies.length === 0) {
     return (
       <div>
         <SearchForm search={searchCompany} />
@@ -62,7 +58,7 @@ function CompanyList() {
       </div>);
   }
 
-
+  console.log("PASSED THE IF CONDITIONS");
   // add keys
   return (
     <div className="CompanyList">
