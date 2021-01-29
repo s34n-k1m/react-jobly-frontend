@@ -7,8 +7,6 @@ import jwt from "jsonwebtoken";
 import UserContext from "./userContext";
 import useLocalStorage from "./useLocalStorage";
 
-// import {BrowserRouter} from "react-router-dom";
-
 /** App Component
  * 
  * Props: none
@@ -59,18 +57,22 @@ function App() {
     try {
       await JoblyApi.updateProfile(formData);
       const user = await JoblyApi.getUser(currentUser.username);
-      setCurrentUser({...user, applications: new Set(user.applications)});
+      setCurrentUser({ ...user, applications: new Set(user.applications) });
 
       return ["Profile update successful"];
     } catch (err) {
-      return err;
+        let errorMsg = err;
+        if (err[0] === "instance.password does not meet minimum length of 5") {
+          errorMsg[0] = "Password does not meet minimum length of 5"
+        }
+      return errorMsg;
     }
   };
   /* apply to job, reset currentUser*/
   async function applyToJob(id) {
     await JoblyApi.applyJob(currentUser.username, id);
     const user = await JoblyApi.getUser(currentUser.username);
-    setCurrentUser({...user, applications: new Set(user.applications)});
+    setCurrentUser({ ...user, applications: new Set(user.applications) });
   }
 
   useEffect(function getCurrentUser() {
@@ -81,11 +83,11 @@ function App() {
         const payload = jwt.decode(token);
         const user = await JoblyApi.getUser(payload.username);
 
-        setCurrentUser({...user, applications: new Set(user.applications)});
+        setCurrentUser({ ...user, applications: new Set(user.applications) });
       }
+      setCurrentUser(null);
       setReceivedCurrUser(true);
     };
-    setCurrentUser(null);
     getCurrentUserApiCall();
   }, [token])
 
