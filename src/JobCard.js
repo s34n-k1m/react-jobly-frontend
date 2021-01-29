@@ -17,9 +17,7 @@ function JobCard({ job, applyToJob }) {
 
   useEffect(
     function setJobApplicationStatus(){
-      // set 
       const applied = currentUser.applications.has(job.id);
-      console.log("applied", applied);
       setIsApplied(applied);
     }, [job.id, currentUser.applications])
 

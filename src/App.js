@@ -25,7 +25,8 @@ function App() {
 
   /* Logout function, sets currentUser to null */
   function logout() {
-    setToken(token => null);
+    setCurrentUser(null);
+    setToken(null);
   }
 
   /* signup function, set token */
@@ -85,7 +86,6 @@ function App() {
 
         setCurrentUser({ ...user, applications: new Set(user.applications) });
       }
-      setCurrentUser(null);
       setReceivedCurrUser(true);
     };
     getCurrentUserApiCall();

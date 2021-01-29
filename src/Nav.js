@@ -69,7 +69,6 @@ function Nav({ logout }) {
       <NavLink exact to="/" className="navbar-brand">
         Jobly
       </NavLink>
-      {/* Put <ul> here */}
       {(currentUser)
         ? displayLinksLoggedIn()
         : displayLinksLoggedOut()}
