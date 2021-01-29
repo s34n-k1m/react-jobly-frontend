@@ -5,7 +5,7 @@ import SearchForm from "./SearchForm";
 
 
 /*  
-Props: none
+Props: applyToJob function 
 State: 
   jobs [job,...]
   isLoading : T/F
@@ -13,7 +13,7 @@ State:
   searchResultStr: "search results for 'account' "
 App -> Routes -> JobList -> JobCard
 */
-function JobList() {
+function JobList({applyToJob}) {
   const [jobs, setJobs] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(null);
@@ -67,7 +67,7 @@ function JobList() {
           ? <h5>{jobs.length} {searchResultStr}</h5>
           : null
       }
-      {jobs.map(j => <JobCard key={j.id} job={j} />)}
+      {jobs.map(j => <JobCard applyToJob={applyToJob} key={j.id} job={j} />)}
     </div>);
 }
 

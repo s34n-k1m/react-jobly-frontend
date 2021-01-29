@@ -27,7 +27,7 @@ function App() {
 
   /* Logout function, sets currentUser to null */
   function logout() {
-    setToken(null);
+    setToken(token => null);
   }
 
   /* signup function, set token */
@@ -58,15 +58,19 @@ function App() {
   async function updateProfile(formData) {
     try {
       await JoblyApi.updateProfile(formData);
-      const payload = jwt.decode(token);
-      const user = await JoblyApi.getUser(payload.username);
-
-      setCurrentUser(user);
+      const user = await JoblyApi.getUser(currentUser.username);
+      setCurrentUser({...user, applications: new Set(user.applications)});
 
       return ["Profile update successful"];
     } catch (err) {
       return err;
     }
+  };
+  /* apply to job, reset currentUser*/
+  async function applyToJob(id) {
+    await JoblyApi.applyJob(currentUser.username, id);
+    const user = await JoblyApi.getUser(currentUser.username);
+    setCurrentUser({...user, applications: new Set(user.applications)});
   }
 
   useEffect(function getCurrentUser() {
@@ -77,9 +81,9 @@ function App() {
         const payload = jwt.decode(token);
         const user = await JoblyApi.getUser(payload.username);
 
-        setCurrentUser(user);
-        setReceivedCurrUser(true);
+        setCurrentUser({...user, applications: new Set(user.applications)});
       }
+      setReceivedCurrUser(true);
     };
     setCurrentUser(null);
     getCurrentUserApiCall();
@@ -95,7 +99,8 @@ function App() {
             logout={logout}
             signup={signup}
             login={login}
-            updateProfile={updateProfile} />
+            updateProfile={updateProfile}
+            applyToJob={applyToJob} />
         </UserContext.Provider>
       </BrowserRouter>
     </div>

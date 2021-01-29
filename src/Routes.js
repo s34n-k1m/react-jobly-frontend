@@ -17,12 +17,13 @@ import { useContext } from "react";
  * - logout: function passed from App
  * - login: function passed from App
  * - signup: function passed from App
+ * -applyToJob: function passed from App
  * 
  * State: none
  * 
  * App -> Routes -> {Homepage, CompanyList, CompanyDetail, JobList, LoginForm, SignupForm, ProfileForm}
  * */
-function Routes({ login, logout, signup, updateProfile }) {
+function Routes({ login, logout, signup, updateProfile, applyToJob}) {
   const currentUser = useContext(UserContext);
 
   return (
@@ -36,10 +37,10 @@ function Routes({ login, logout, signup, updateProfile }) {
           {currentUser ? <CompanyList /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/companies/:handle">
-          {currentUser ? <CompanyDetail /> : <Redirect to="/" />}
+          {currentUser ? <CompanyDetail applyToJob={applyToJob} /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/jobs">
-          {currentUser ? <JobList /> : <Redirect to="/" />}
+          {currentUser ? <JobList applyToJob={applyToJob} /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/profile">
           {currentUser ? <ProfileForm updateProfile={updateProfile}/> : <Redirect to="/" />}

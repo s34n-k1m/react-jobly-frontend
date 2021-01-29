@@ -35,6 +35,7 @@ function ProfileForm({ updateProfile }) {
       if (resUpdate[0] === "Profile update successful") {
         setFormData(fData => ({ ...fData, password: "" }));
         setSuccessMessage("Successfully updated");
+        setErrorMessages([]);
       } else {
         setSuccessMessage(null);
         setErrorMessages(resUpdate);
@@ -56,6 +57,7 @@ function ProfileForm({ updateProfile }) {
 
   /* Displays error message if wrong login info inputted */
   function displayErrorMessage() {
+    // && instead of null
     return (
       <>
         {
@@ -78,10 +80,12 @@ function ProfileForm({ updateProfile }) {
         }
       </>);
   }
-
+  
   return (
     <div className="SignupForm col-6 container">
       <form className="SignupForm-form my-3 mx-15" onSubmit={handleSubmit}>
+          {displayErrorMessage()}
+          {displaySuccessMessage()}
         <div className="form-group">
           <label>Username:</label>
           <p className="form-control-plaintext">{username}</p>
@@ -125,8 +129,6 @@ function ProfileForm({ updateProfile }) {
             onChange={handleChange}
             required
           />
-          {displayErrorMessage()}
-          {displaySuccessMessage()}
           <button className="btn btn-primary mt-3">Update</button>
         </div>
 

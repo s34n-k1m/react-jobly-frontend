@@ -40,7 +40,7 @@ function SignupForm({ signup }) {
       setIsSigningUp(false)
     }
 
-  }, [isSigningUp, signup, formData])
+  }, [formData, isSigningUp, signup])
 
   /* Handles form data changes */
   function handleChange(evt) {

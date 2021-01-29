@@ -4,12 +4,12 @@ import { useParams, Redirect } from "react-router-dom";
 import JobCard from "./JobCard";
 
 /*  
-Props: none
+Props: applyToJob function 
 Params: handle
 State: company {handle, name, ...}
 App -> Routes -> CompanyDetail
 */
-function CompanyDetail() {
+function CompanyDetail({ applyToJob }) {
   const { handle } = useParams();
   const [company, setCompany] = useState(null);
   const [isCompanyNotFound, setIsCompanyNotFound] = useState(false);
@@ -27,7 +27,7 @@ function CompanyDetail() {
     }
     getCompanyWithApi();
   }, [handle]);
-  
+
   if (isCompanyNotFound === true) return <Redirect to="/" />
   if (!company) return <div>Loading...</div>;
 
@@ -35,7 +35,7 @@ function CompanyDetail() {
     <div className="CompanyDetail">
       <h4 className="CompanyDetail-name text-left"> {company.name}</h4>
       <p className="CompanyDetail-description text-left"> {company.description}</p>
-      {company.jobs.map(j => <JobCard key={j.id} job={{ ...j, companyName: undefined }} />)}
+      {company.jobs.map(j => <JobCard key={j.id} applyToJob={applyToJob} job={{ ...j, companyName: undefined }} />)}
     </div>);
 }
 
